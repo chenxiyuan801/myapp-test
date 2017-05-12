@@ -71,7 +71,7 @@ class PaymentsController < ApplicationController
   private
   def is_payment_success?
     # %w[TRADE_SUCCESS TRADE_FINISHED].include?(params[:trade_status])
-    params[:trade_status].present?
+    params[:pay_no].present?
   end
 
   def do_payment
