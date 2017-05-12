@@ -67,7 +67,7 @@ class PaymentsController < ApplicationController
   end
 
   def find_and_validate_payment_no
-    @payment = Payment.find_by_payment_no params[:out_trade_no]
+    @payment = Payment.find_by_payment_no params[:pay_id]
     unless @payment
       if is_payment_success?
         # TODO
@@ -95,6 +95,7 @@ class PaymentsController < ApplicationController
 
       "anti_phishing_key" => "",
       "exter_invoke_ip" => "",
+      "params" => payment.payment_no,
       "pay_id" => payment.payment_no,
       "subject" => "大赛加油站商品购买",
       "total_fee" => payment.total_money,
