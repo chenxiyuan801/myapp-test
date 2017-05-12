@@ -1,7 +1,7 @@
 class PaymentsController < ApplicationController
 
   protect_from_forgery except: [:alipay_notify]
-
+  before_action :auth_request, only: [:pay_notify, :pay_return]
   before_action :auth_user, except: [:pay_notify]
   before_action :find_and_validate_payment_no, only: [:pay_return, :pay_notify]
 
@@ -54,11 +54,11 @@ class PaymentsController < ApplicationController
   end
 
   def auth_request
-    unless build_is_request_from_alipay?(params)
-      Rails.logger.info "PAYMENT DEBUG NON ALIPAY REQUEST: #{params.to_hash}"
-      redirect_to failed_payments_path
-      return
-    end
+    # unless build_is_request_from_alipay?(params)
+    #   Rails.logger.info "PAYMENT DEBUG NON ALIPAY REQUEST: #{params.to_hash}"
+    #   redirect_to failed_payments_path
+    #   return
+    # end
 
     unless build_is_request_sign_valid?(params)
       Rails.logger.info "PAYMENT DEBUG ALIPAY SIGN INVALID: #{params.to_hash}"
