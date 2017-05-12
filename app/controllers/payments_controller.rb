@@ -1,7 +1,7 @@
 class PaymentsController < ApplicationController
 
   protect_from_forgery except: [:alipay_notify]
-  before_action :auth_request, only: [:pay_notify, :pay_return]
+  # before_action :auth_request, only: [:pay_notify, :pay_return]
   before_action :auth_user, except: [:pay_notify]
   before_action :find_and_validate_payment_no, only: [:pay_return, :pay_notify]
 
