@@ -3,7 +3,6 @@ class PaymentsController < ApplicationController
   protect_from_forgery except: [:alipay_notify]
 
   before_action :auth_user, except: [:pay_notify]
-  before_action :auth_request, only: [:pay_return, :pay_notify]
   before_action :find_and_validate_payment_no, only: [:pay_return, :pay_notify]
 
   def index
@@ -37,7 +36,7 @@ class PaymentsController < ApplicationController
 
   private
   def is_payment_success?
-    %w[2017].include?(params[:pay_no])
+    !params[:pay_no].nil?
   end
 
   def do_payment
@@ -87,19 +86,20 @@ class PaymentsController < ApplicationController
     #   sign_type: MD5 | RSA
     pay_options = {
       "service" => 'create_direct_pay_by_user',
-      "partner" => ENV['ALIPAY_PID'],
+      "id" => ENV['ALIPAY_PID'],
       "seller_id" => ENV['ALIPAY_PID'],
       "pay_type" => "1",
+      "page" => "2",
       "notify_url" => ENV['ALIPAY_NOTIFY_URL'],
       "return_url" => ENV['ALIPAY_RETURN_URL'],
 
       "anti_phishing_key" => "",
       "exter_invoke_ip" => "",
-      "out_trade_no" => payment.payment_no,
+      "pay_id" => payment.payment_no,
       "subject" => "大赛加油站商品购买",
       "total_fee" => payment.total_money,
       "body" => "大赛加油站商品购买",
-      "_input_charset" => "utf-8",
+      "chart" => "utf-8",
       "sign_type" => 'MD5',
       "sign" => ""
     }
