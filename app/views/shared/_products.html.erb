@@ -2,7 +2,7 @@
   <% @products.each do |product| %>
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <% if product.main_product_image.presnet? %>
+      <% if product.main_product_image.present? %>
       <%= link_to image_tag(product.main_product_image.image.url(:middle), alt: product.title), product_path(product) %>
     <% else %>
       <%= image_tag("http://placehold.it/400x400&text=No Pic") %>
