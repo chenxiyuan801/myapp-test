@@ -86,7 +86,7 @@ class PaymentsController < ApplicationController
     #   sign_type: MD5 | RSA
     pay_options = {
       "service" => 'create_direct_pay_by_user',
-      "id" => ENV['ALIPAY_PID'],
+      "partner" => ENV['ALIPAY_PID'],
       "seller_id" => ENV['ALIPAY_PID'],
       "pay_type" => "1",
       "page" => "1",
