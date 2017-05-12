@@ -74,41 +74,21 @@ class PaymentsController < ApplicationController
   end
 
   def do_payment
-    # unless @payment.is_success? # 避免同步通知和异步通知多次调用
-    #   if is_payment_success?
-    #     @payment.do_success_payment! params
-    #     redirect_to success_payments_path
-    #   else
-    #     @payment.do_failed_payment! params
-    #     redirect_to failed_payments_path
-    #   end
-    # else
-    #  redirect_to success_payments_path
-    # end
-
-    # unless @payment.is_success? # 避免同步通知和异步通知多次调用
-      # if is_payment_success?
         @payment.do_success_payment! params
         redirect_to success_payments_path
-      # else
-        # @payment.do_failed_payment! params
-        # redirect_to failed_payments_path
-    #   end
-    # else
-     redirect_to success_payments_path
-    # end
+
   end
 
   def auth_request
     unless build_is_request_from_alipay?(params)
       Rails.logger.info "PAYMENT DEBUG NON ALIPAY REQUEST: #{params.to_hash}"
-      redirect_to failed_payments_path
+      redirect_to success_payments_path
       return
     end
 
     unless build_is_request_sign_valid?(params)
       Rails.logger.info "PAYMENT DEBUG ALIPAY SIGN INVALID: #{params.to_hash}"
-      redirect_to failed_payments_path
+      redirect_to success_payments_path
     end
   end
 
