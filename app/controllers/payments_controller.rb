@@ -89,7 +89,6 @@ class PaymentsController < ApplicationController
       "id" => ENV['ALIPAY_PID'],
       "seller_id" => ENV['ALIPAY_PID'],
       "pay_type" => "1",
-      "page" => "2",
       "notify_url" => ENV['ALIPAY_NOTIFY_URL'],
       "return_url" => ENV['ALIPAY_RETURN_URL'],
 
