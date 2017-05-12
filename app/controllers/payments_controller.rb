@@ -3,8 +3,8 @@ class PaymentsController < ApplicationController
   protect_from_forgery except: [:alipay_notify]
 
   before_action :auth_user, except: [:pay_notify]
-  # before_action :auth_request, only: [:pay_return, :pay_notify]
-  # before_action :find_and_validate_payment_no, only: [:pay_return, :pay_notify]
+  before_action :auth_request, only: [:pay_return, :pay_notify]
+  before_action :find_and_validate_payment_no, only: [:pay_return, :pay_notify]
 
   def index
     @payment = current_user.payments.find_by(payment_no: params[:payment_no])
@@ -35,61 +35,35 @@ class PaymentsController < ApplicationController
 
   end
 
-  module RandomCode
-    class << self
-      def generate_password len = 8
-        seed = (0..9).to_a + ('a'..'z').to_a + ('A'..'Z').to_a + ['!', '@', '#', '$', '%', '.', '*'] * 4
-        token = ""
-        len.times { |t| token << seed.sample.to_s }
-        token
-      end
-
-      def generate_cellphone_token len = 6
-        a = lambda { (0..9).to_a.sample }
-        token = ""
-        len.times { |t| token << a.call.to_s }
-        token
-      end
-
-      def generate_utoken len = 8
-        a = lambda { rand(36).to_s(36) }
-        token = ""
-        len.times { |t| token << a.call.to_s }
-        token
-      end
-
-      def generate_product_uuid
-        Date.today.to_s.split('-')[1..-1].join() << generate_utoken(6).upcase
-      end
-
-      def generate_order_uuid
-        Date.today.to_s.split('-').join()[2..-1] << generate_utoken(8).upcase
-      end
-    end
-  end
-
   private
   def is_payment_success?
-    %w[2017 05].include?(params[])
+    %w[2017].include?(params[:pay_no])
   end
 
   def do_payment
+    unless @payment.is_success? # 避免同步通知和异步通知多次调用
+      if is_payment_success?
         @payment.do_success_payment! params
-        render :json => "ok"
         redirect_to success_payments_path
-
+      else
+        @payment.do_failed_payment! params
+        redirect_to failed_payments_path
+      end
+    else
+     redirect_to success_payments_path
+    end
   end
 
   def auth_request
     unless build_is_request_from_alipay?(params)
       Rails.logger.info "PAYMENT DEBUG NON ALIPAY REQUEST: #{params.to_hash}"
-      redirect_to success_payments_path
+      redirect_to failed_payments_path
       return
     end
 
     unless build_is_request_sign_valid?(params)
       Rails.logger.info "PAYMENT DEBUG ALIPAY SIGN INVALID: #{params.to_hash}"
-      redirect_to success_payments_path
+      redirect_to failed_payments_path
     end
   end
 
@@ -122,9 +96,9 @@ class PaymentsController < ApplicationController
       "anti_phishing_key" => "",
       "exter_invoke_ip" => "",
       "out_trade_no" => payment.payment_no,
-      "subject" => "蛋人商城商品购买",
+      "subject" => "大赛加油站商品购买",
       "total_fee" => payment.total_money,
-      "body" => "蛋人商城商品购买",
+      "body" => "大赛加油站商品购买",
       "_input_charset" => "utf-8",
       "sign_type" => 'MD5',
       "sign" => ""
