@@ -72,7 +72,7 @@ class Payment < ApplicationRecord
 
   def do_success_payment! options
     self.transaction do
-      self.transaction_no = options[:trade_no]
+      self.transaction_no = options[:pay_no]
       self.status = Payment::PaymentStatus::Success
       self.raw_response = options.to_json
       self.payment_at = Time.now
@@ -92,7 +92,7 @@ class Payment < ApplicationRecord
   end
 
   def do_failed_payment! options
-    self.transaction_no = options[:trade_no]
+    self.transaction_no = options[:pay_no]
     self.status = Payment::PaymentStatus::Failed
     self.raw_response = options.to_json
     self.payment_at = Time.now
