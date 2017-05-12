@@ -74,17 +74,29 @@ class PaymentsController < ApplicationController
   end
 
   def do_payment
-    unless @payment.is_success? # 避免同步通知和异步通知多次调用
-      if is_payment_success?
+    # unless @payment.is_success? # 避免同步通知和异步通知多次调用
+    #   if is_payment_success?
+    #     @payment.do_success_payment! params
+    #     redirect_to success_payments_path
+    #   else
+    #     @payment.do_failed_payment! params
+    #     redirect_to failed_payments_path
+    #   end
+    # else
+    #  redirect_to success_payments_path
+    # end
+
+    # unless @payment.is_success? # 避免同步通知和异步通知多次调用
+      # if is_payment_success?
         @payment.do_success_payment! params
         redirect_to success_payments_path
-      else
-        @payment.do_failed_payment! params
-        redirect_to failed_payments_path
-      end
-    else
+      # else
+        # @payment.do_failed_payment! params
+        # redirect_to failed_payments_path
+    #   end
+    # else
      redirect_to success_payments_path
-    end
+    # end
   end
 
   def auth_request
