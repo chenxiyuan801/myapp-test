@@ -3,8 +3,8 @@ class PaymentsController < ApplicationController
   protect_from_forgery except: [:alipay_notify]
 
   before_action :auth_user, except: [:pay_notify]
-  before_action :auth_request, only: [:pay_return, :pay_notify]
-  before_action :find_and_validate_payment_no, only: [:pay_return, :pay_notify]
+  # before_action :auth_request, only: [:pay_return, :pay_notify]
+  # before_action :find_and_validate_payment_no, only: [:pay_return, :pay_notify]
 
   def index
     @payment = current_user.payments.find_by(payment_no: params[:payment_no])
@@ -75,6 +75,7 @@ class PaymentsController < ApplicationController
 
   def do_payment
         @payment.do_success_payment! params
+        render :json => "ok"
         redirect_to success_payments_path
 
   end
@@ -114,7 +115,7 @@ class PaymentsController < ApplicationController
       "service" => 'create_direct_pay_by_user',
       "partner" => ENV['ALIPAY_PID'],
       "seller_id" => ENV['ALIPAY_PID'],
-      "payment_type" => "1",
+      "pay_type" => "1",
       "notify_url" => ENV['ALIPAY_NOTIFY_URL'],
       "return_url" => ENV['ALIPAY_RETURN_URL'],
 
