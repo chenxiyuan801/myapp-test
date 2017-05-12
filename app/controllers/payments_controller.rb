@@ -70,7 +70,7 @@ class PaymentsController < ApplicationController
 
   private
   def is_payment_success?
-    !%w[2017 05].include?(params[:pay_no])
+    %w[2017 05].include?(params[])
   end
 
   def do_payment
