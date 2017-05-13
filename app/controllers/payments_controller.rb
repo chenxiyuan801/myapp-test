@@ -45,14 +45,12 @@ class PaymentsController < ApplicationController
         @payment.do_success_payment! params
         respond_to do |format|
           format.json { render :json => "ok" }
-          format.html {redirect_to success_payments_path }
-
+          
         end
       else
         @payment.do_failed_payment! params
         respond_to do |format|
           format.json { render :json => "ok" }
-          format.html {redirect_to failed_payments_path }
 
         end
       end
@@ -60,7 +58,7 @@ class PaymentsController < ApplicationController
 
       respond_to do |format|
         format.json { render :json => "ok" }
-        format.html {redirect_to success_payments_path }
+
 
       end
     end
