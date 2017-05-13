@@ -43,15 +43,23 @@ class PaymentsController < ApplicationController
     unless @payment.is_success? # 避免同步通知和异步通知多次调用
       if is_payment_success?
         @payment.do_success_payment! params
-        render :json => "ok"
-        redirect_to success_payments_path
+        respond_to do |format|
+          format.html {redirect_to success_payments_path }
+          format.json { render :json => "ok" }
+        end
       else
         @payment.do_failed_payment! params
-        redirect_to failed_payments_path
+        respond_to do |format|
+          format.html {redirect_to failed_payments_path }
+          format.json { render :json => "ok" }
+        end
       end
     else
-      render :json => "ok"
-     redirect_to success_payments_path
+
+      respond_to do |format|
+        format.html {redirect_to success_payments_path }
+        format.json { render :json => "ok" }
+      end
     end
   end
 
