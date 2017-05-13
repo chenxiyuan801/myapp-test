@@ -44,21 +44,24 @@ class PaymentsController < ApplicationController
       if is_payment_success?
         @payment.do_success_payment! params
         respond_to do |format|
-          format.html {redirect_to success_payments_path }
           format.json { render :json => "ok" }
+          format.html {redirect_to success_payments_path }
+
         end
       else
         @payment.do_failed_payment! params
         respond_to do |format|
-          format.html {redirect_to failed_payments_path }
           format.json { render :json => "ok" }
+          format.html {redirect_to failed_payments_path }
+
         end
       end
     else
 
       respond_to do |format|
-        format.html {redirect_to success_payments_path }
         format.json { render :json => "ok" }
+        format.html {redirect_to success_payments_path }
+
       end
     end
   end
