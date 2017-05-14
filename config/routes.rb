@@ -21,7 +21,6 @@ Rails.application.routes.draw do
       get :generate_pay
       get :pay_return
       get :pay_notify, :defaults => { :format => :json }
-      post :pay_notify, :defaults => { :format => :json } 
       get :success
       get :failed
     end
