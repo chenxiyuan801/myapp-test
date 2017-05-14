@@ -42,6 +42,7 @@ class PaymentsController < ApplicationController
   def do_payment
     respond_to do |format|
       format.json { render :json => "ok" }
+    end 
   end
 
   def auth_request
