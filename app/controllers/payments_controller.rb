@@ -40,7 +40,14 @@ class PaymentsController < ApplicationController
   end
 
   def do_payment
-      format.json { render json: "ok" }
+    respond_to do |format|
+      format.html {
+        redirect_to(root_path)
+      }
+      format.json {
+        render json: "ok"
+      }
+    end
   end
 
   def auth_request
