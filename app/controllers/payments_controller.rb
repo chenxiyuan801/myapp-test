@@ -40,29 +40,8 @@ class PaymentsController < ApplicationController
   end
 
   def do_payment
-    @payment = Payment.find_by_payment_no params[:pay_id]
-    unless @payment.is_success? # 避免同步通知和异步通知多次调用
-      if is_payment_success?
-        @payment.do_success_payment! params
-        respond_to do |format|
-          format.json { render :json => "ok" }
-
-        end
-      else
-        @payment.do_failed_payment! params
-        respond_to do |format|
-          format.json { render :json => "ok" }
-
-        end
-      end
-    else
-
-      respond_to do |format|
-        format.json { render :json => "ok" }
-
-
-      end
-    end
+    respond_to do |format|
+      format.json { render :json => "ok" }
   end
 
   def auth_request
