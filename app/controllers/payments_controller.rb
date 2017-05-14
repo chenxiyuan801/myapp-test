@@ -41,11 +41,12 @@ class PaymentsController < ApplicationController
 
   def do_payment
     respond_to do |format|
-      format.html {
-        redirect_to(root_path)
-      }
+
       format.json {
         render json: "ok"
+      }
+      format.html {
+        redirect_to(root_path)
       }
     end
   end
