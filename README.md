@@ -67,3 +67,5 @@ $git checkout 01
 # 安装
 
 Ruby和Ruby on Rails环境的安装请参考这里: [Ruby和Ruby on Rails开发环境搭建](https://eggman.tv/blogs/how-to-setup-your-ruby-on-rails-development-environment)
+
+测试测试
